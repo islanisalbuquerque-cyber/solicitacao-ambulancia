@@ -1,0 +1,78 @@
+name: Android APK de teste
+
+# Repository layout: server at root, native project in android-app/.
+# The packager places this workflow in the repository's root .github/workflows/.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'android-app/**'
+      - '.github/workflows/android-apk.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-apk-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-apk:
+    name: APK Android com assinatura efêmera de teste
+    runs-on: windows-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Obter fontes
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Preparar JDK 21
+        uses: actions/setup-java@v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar plataforma Android 36 e Build Tools 36.0.0
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ciAndroidSdk = $env:ANDROID_HOME
+          if (-not $ciAndroidSdk -or -not (Test-Path -LiteralPath $ciAndroidSdk)) {
+            throw 'O runner Windows precisa fornecer ANDROID_HOME com o SDK Android.'
+          }
+          $ciSdkManager = Join-Path $ciAndroidSdk 'cmdline-tools/latest/bin/sdkmanager.bat'
+          if (-not (Test-Path -LiteralPath $ciSdkManager)) {
+            throw 'sdkmanager não está disponível no SDK do runner Windows.'
+          }
+          # The owner has explicitly accepted the Android SDK license.
+          # Accept it in this disposable runner without persisting licenses locally.
+          1..100 | ForEach-Object { 'y' } | & $ciSdkManager "--sdk_root=$ciAndroidSdk" --licenses
+          if ($LASTEXITCODE -ne 0) { throw 'Não foi possível registrar as licenças no runner.' }
+          & $ciSdkManager "--sdk_root=$ciAndroidSdk" --install 'platforms;android-36' 'build-tools;36.0.0'
+          if ($LASTEXITCODE -ne 0) { throw 'Não foi possível preparar os pacotes Android fixados.' }
+
+      - name: Compilar e assinar APK somente para teste
+        run: |
+          $ErrorActionPreference = 'Stop'
+          # build.ps1 generates a new test key under RUNNER_TEMP/signing.
+          # This key is deliberately not retained or uploaded for future releases.
+          & ./android-app/build.ps1 `
+            -SdkDirectory $env:ANDROID_HOME `
+            -JavaDirectory $env:JAVA_HOME `
+            -SigningDirectory (Join-Path $env:RUNNER_TEMP 'signing') `
+            -BuildDirectory (Join-Path $env:RUNNER_TEMP 'build') `
+            -OutputFile (Join-Path $env:RUNNER_TEMP 'central-ambulancia-teste.apk')
+          if ($LASTEXITCODE -ne 0) { throw 'A compilação do APK de teste falhou.' }
+
+      - name: Disponibilizar somente o APK de teste
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: central-ambulancia-apk-TESTE-assinatura-efemera
+          path: ${{ runner.temp }}/central-ambulancia-teste.apk
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+          include-hidden-files: false
