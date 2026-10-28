@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Solicitação de Ambulância</string>
+    <string name="server">Servidor</string>
+    <string name="server_unconfigured">Servidor não configurado</string>
+    <string name="settings_description">Configurações do servidor e informações do aplicativo</string>
+    <string name="configure_title">Conecte seu sistema</string>
+    <string name="configure_message">Informe o endereço HTTPS do sistema publicado para acessar sua conta e as solicitações.</string>
+    <string name="configure_button">Configurar servidor</string>
+    <string name="server_dialog_title">Endereço do servidor</string>
+    <string name="server_dialog_hint">Endereço HTTPS do sistema</string>
+    <string name="server_dialog_help">Use somente a origem: HTTPS, domínio e porta opcional. Não inclua caminhos, parâmetros ou credenciais.</string>
+    <string name="server_invalid">Informe uma origem HTTPS válida, sem usuário, senha, caminho, parâmetros ou fragmento.</string>
+    <string name="connect">Conectar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="change_server">Alterar endereço do servidor</string>
+    <string name="change_title">Trocar servidor?</string>
+    <string name="change_message">A sessão deste aplicativo será encerrada. Será necessário entrar novamente no novo servidor.</string>
+    <string name="change_confirm">Trocar servidor</string>
+    <string name="preparing_title">Preparando conexão</string>
+    <string name="preparing_message">Encerrando a sessão anterior antes de conectar ao servidor.</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="connection_error_title">Não foi possível conectar</string>
+    <string name="connection_error_message">Verifique a conexão com a internet e a disponibilidade do servidor. Depois, tente novamente.</string>
+    <string name="ssl_error_title">Conexão segura indisponível</string>
+    <string name="ssl_error_message">O certificado HTTPS não pôde ser validado. A conexão foi cancelada. Verifique o endereço ou fale com o responsável pelo servidor.</string>
+    <string name="blocked_navigation">Este aplicativo abre somente o servidor configurado.</string>
+    <string name="blocked_title">Endereço bloqueado</string>
+    <string name="blocked_message">A página tentou sair do servidor configurado. Volte ao sistema ou confira o endereço nas configurações.</string>
+    <string name="no_email_app">Nenhum aplicativo de e-mail está disponível neste aparelho.</string>
+    <string name="downloads_unavailable">Use a versão web do sistema para baixar arquivos.</string>
+    <string name="webview_error_title">Componente web indisponível</string>
+    <string name="webview_error_message">Ative ou atualize o Android System WebView neste aparelho e tente novamente.</string>
+    <string name="renderer_error_title">A página foi interrompida</string>
+    <string name="renderer_error_message">O componente web foi reiniciado pelo Android. Tente abrir o sistema novamente.</string>
+    <string name="http_error_message">O servidor não conseguiu abrir esta página. Confira sua disponibilidade e tente novamente.</string>
+    <string name="about">Sobre o aplicativo</string>
+    <string name="about_message">Acesso móvel ao sistema de Solicitação de Ambulância. A origem do servidor é a única configuração salva pelo aplicativo. E-mail e senha são informados diretamente na página HTTPS.</string>
+    <string name="version">Versão</string>
+    <string name="close">Fechar</string>
+    <string name="exit_title">Sair do aplicativo?</string>
+    <string name="exit_message">Sua sessão segue as regras do servidor. Use Sair dentro do sistema para encerrá-la.</string>
+    <string name="exit_confirm">Fechar aplicativo</string>
+</resources>
