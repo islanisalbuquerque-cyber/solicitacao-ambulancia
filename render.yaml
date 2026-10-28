@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: solicitacao-ambulancia-teste
+    runtime: node
+    plan: free
+    numInstances: 1
+    autoDeployTrigger: "off"
+    buildCommand: npm install --omit=dev --no-audit --no-fund
+    startCommand: node server.mjs
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      # Empty uses Render's own HTTPS RENDER_EXTERNAL_URL.
+      - key: PUBLIC_ORIGIN
+        value: ""
+      - key: DATABASE_URL
+        sync: false
+      - key: BOOTSTRAP_ADMIN_JSON
+        sync: false

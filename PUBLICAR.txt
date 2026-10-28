@@ -1,0 +1,160 @@
+PUBLICAR O SISTEMA E TESTAR O APK
+Render Free + Neon Free • instruções preparadas em 27/10/2026
+
+O que já está preparado
+O código do servidor, persistência PostgreSQL, telas web, configuração Render
+e fontes Android estão preparados. Isso não significa que o sistema já esteja
+publicado ou que exista um APK compilado. O build Android em nuvem e os testes
+em aparelho continuam pendentes até o fluxo GitHub Actions ser executado.
+
+Você já tem GitHub. Ainda precisa criar suas próprias contas pessoais no
+Neon e no Render. Faça o cadastro diretamente nos sites, usando o GitHub se
+essa opção aparecer. Não envie senhas, códigos de autenticação ou a conexão
+do banco para o chat, arquivos públicos ou comentários do repositório.
+
+1. PREPARAR O REPOSITÓRIO NO GITHUB
+
+Use um repositório público ou privado contendo somente os fontes e arquivos
+de configuração sem segredos. Use a pasta de publicação preparada, com os
+arquivos do servidor na raiz e o projeto Android em android-app/.
+Não é necessário criar um README inicial: o envio dos arquivos pode criar
+a branch main, e README.md já faz parte do pacote.
+A estrutura esperada inclui:
+
+  README.md
+  server.mjs
+  storage-postgres.mjs
+  package.json
+  render.yaml
+  index.html e inicio.html
+  src/
+  scripts/exportar-master.mjs
+  android-app/
+  .github/workflows/
+
+Inclua os arquivos ocultos de configuração e o workflow. Não envie data/,
+.env com valores, usuários locais, bootstrap JSON, conexão PostgreSQL,
+arquivos de assinatura, chaves privadas, senhas ou pastas de build.
+O arquivo .env.example contém somente nomes de configuração e pode ser
+mantido sem valores privados. Repositório privado também não é lugar para
+armazenar esses segredos.
+
+2. CRIAR O BANCO NO NEON FREE
+
+Abra https://neon.com e crie sua conta pessoal usando GitHub, se disponível.
+Escolha o plano Free e crie um projeto PostgreSQL para o teste. No painel,
+abra Connect, escolha o banco e a função de acesso e copie a conexão indicada.
+A opção com pool de conexões pode ser usada. Preserve a exigência de TLS,
+como sslmode=require. A conexão contém uma senha: mantenha-a privada.
+
+Não cole essa conexão em código nem no GitHub. Ela será usada somente como
+DATABASE_URL no painel do Render. O servidor mantém verificação de TLS e
+certificado; não desative essa proteção para resolver erros de conexão.
+
+O Free tem limites de armazenamento e processamento. Confira o painel e
+continue no Free para este teste; não confirme upgrades ou recursos pagos.
+Plano oficial: https://neon.com/pricing
+Conexão oficial: https://neon.com/docs/connect/connect-from-any-app
+
+3. PREPARAR SOMENTE O PRIMEIRO MASTER
+
+O banco novo começa sem solicitações. Para criar o primeiro acesso MASTER,
+exporte apenas o registro de um MASTER ativo do cadastro local, usando o
+helper scripts/exportar-master.mjs. Ele não altera o cadastro nem pede sua
+senha. O resultado contém um derivado de senha e deve ser tratado como segredo.
+
+Crie uma pasta privada fora da aplicação e da pasta de publicação, por
+exemplo work/private do workspace. Execute o helper com Node 22 ou 24:
+
+  node scripts/exportar-master.mjs --users "CAMINHO_DO_CADASTRO_LOCAL" --email "SEU_EMAIL_MASTER" --out "CAMINHO_PRIVADO_NOVO.json"
+
+Substitua os marcadores localmente. Não use um caminho dentro de data/,
+.git, src/, scripts/, android-app/ ou da pasta de publicação. O destino deve
+ser novo: o helper não sobrescreve arquivos. Ele valida o MASTER selecionado
+e exporta somente id, name, email, role, createdAt, algorithm, salt e hash,
+sem imprimir o conteúdo. A criação usa flag wx e modo600. No Windows, as
+permissões da pasta/NTFS também precisam limitar quem consegue ler o arquivo.
+
+Abra o arquivo privado somente no seu computador para copiar seu conteúdo
+completo para BOOTSTRAP_ADMIN_JSON no painel do Render. Nunca publique esse
+arquivo, nem mesmo no repositório privado. Não cole o conteúdo em logs ou no
+chat. Guarde-o apenas enquanto necessário e mantenha-o fora do ZIP de fontes.
+
+Somente esse MASTER será criado no banco vazio. Use a mesma senha já vinculada
+ao registro local. Depois cadastre os demais usuários pela aba Usuários.
+Nenhuma solicitação ou decisão local é migrada automaticamente. Se o banco
+já foi iniciado, o bootstrap não substitui usuários nem redefine senhas.
+Após confirmar que o banco foi inicializado e que o MASTER consegue entrar,
+BOOTSTRAP_ADMIN_JSON pode ser removido do painel; o cadastro fica no banco.
+
+4. CRIAR O WEB SERVICE RENDER FREE
+
+Abra https://render.com, crie sua conta pessoal e conecte o GitHub apenas ao
+repositório necessário. Escolha New > Blueprint e selecione o repositório.
+Use render.yaml na raiz. Confirme que o Web Service está no plano Free,
+com uma instância e sem disco persistente. O banco escolhido é o Neon externo;
+não é necessário criar um banco adicional no Render.
+
+Quando o painel solicitar os valores privados, configure:
+
+  DATABASE_URL          conexão completa copiada do Neon, com TLS
+  BOOTSTRAP_ADMIN_JSON  conteúdo compacto do arquivo privado exportado
+
+Essas variáveis são segredos e ficam somente no painel do Render. O blueprint
+usa sync: false para não guardar valores no código. Em alterações posteriores,
+confira ou edite os segredos manualmente na área Environment do serviço.
+
+Mantenha as demais opções do render.yaml. PUBLIC_ORIGIN vazio usa o endereço
+HTTPS atribuído pelo próprio Render. Se futuramente usar domínio personalizado,
+defina PUBLIC_ORIGIN com a origem HTTPS correspondente, sem caminhos.
+
+O build usa npm install --omit=dev --no-audit --no-fund e o início usa
+node server.mjs. Não use npm ci sem um package-lock.json compatível. A
+instalação local bloqueada por política não foi contornada; o Render executará
+seu próprio build autorizado na nuvem.
+
+Confirme a implantação e aguarde o serviço ficar disponível. Anote a URL
+HTTPS mostrada no painel. O blueprint deixa atualizações automáticas desligadas;
+para publicar mudanças, use o deploy manual do serviço quando estiver pronto.
+Referência oficial do blueprint: https://render.com/docs/blueprint-spec
+
+5. CONFERIR O ACESSO WEB E CONSTRUIR O APK DE TESTE
+
+Abra a URL HTTPS do Render, entre com o MASTER exportado e confira o acesso.
+O histórico de solicitações do banco novo inicia vazio. Cadastre usuários
+individuais na aba Usuários e use contas de teste para conferir o fluxo MLP.
+
+No GitHub, abra Actions e execute manualmente o workflow Android incluído
+no repositório. Depois de uma execução bem-sucedida, baixe o artefato do APK.
+Uma execução pendente ou que falhou não produz um APK validado.
+
+O workflow de teste usa chave de assinatura efêmera. Builds de execuções
+diferentes podem exigir que você desinstale a versão anterior antes de
+instalar o novo APK. Essa desinstalação apaga a configuração e a sessão
+locais do aplicativo; os registros persistidos no Neon continuam no banco.
+Uma distribuição com atualizações contínuas precisará preservar a chave
+definitiva de assinatura, fora do repositório.
+
+Instale o APK no Android 8.0 ou posterior e permita a instalação desse arquivo
+somente quando o próprio Android solicitar. Na primeira tela do aplicativo,
+informe apenas a origem HTTPS do Render, sem /inicio, parâmetros ou credenciais.
+Nenhum endereço remoto vem pré-configurado. Entre com a conta individual.
+Para trocar o servidor, use o botão Servidor da barra nativa; a troca encerra
+a sessão local e exige novo login.
+
+6. LIMITES DO TESTE SEM CUSTO
+
+O Render Free suspende o serviço após 15 minutos sem tráfego. O primeiro
+acesso seguinte pode demorar cerca de um minuto para reativá-lo. Aguarde e
+use Tentar novamente no aplicativo, se necessário. Reinícios e novos deploys
+encerram as sessões em memória; será preciso entrar novamente.
+
+O sistema usa PostgreSQL no Neon porque o armazenamento local do Render
+Free é temporário e não permite disco persistente. Usuários e solicitações
+gravados no banco permanecem conforme a disponibilidade e os limites do Neon.
+
+Este arranjo Free é para validação. Acompanhe limites de uso, builds e tráfego
+nos painéis e não aceite recursos pagos para manter o teste sem custo.
+O plano gratuito não garante disponibilidade contínua para uma operação real.
+Limitações oficiais: https://render.com/docs/free
+Preços e limites do banco: https://neon.com/pricing

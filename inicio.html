@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Solicitação de Ambulância</title>
+    <link rel="icon" href="/src/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/app.css" />
+    <link rel="stylesheet" href="/src/dashboard.css" />
+    <script src="/src/icons.js" defer></script>
+    <script src="/src/dashboard.js" defer></script>
+    <script src="/src/home.js" defer></script>
+  </head>
+  <body class="app-body">
+    <header class="app-header">
+      <div class="app-brand brand">
+        <img src="/src/assets/mercadolivre-logo.webp" alt="Mercado Livre" width="94" height="56" />
+        <div class="brand-copy"><span class="brand-overline">CENTRAL DE OPERAÇÕES</span><h1>Solicitação de Ambulância</h1></div>
+      </div>
+      <div id="accountMenu" class="account-menu" hidden>
+        <span class="account-avatar" data-icon="user" aria-hidden="true"></span>
+        <div class="account-identity"><strong id="userName"></strong><span id="userEmail"></span></div>
+        <span id="userRole" class="role-badge"></span>
+        <button id="logoutButton" type="button" class="btn btn-secondary"><span data-icon="logout" aria-hidden="true"></span><span class="button-label">Sair</span></button>
+      </div>
+    </header>
+
+    <div id="sessionState" class="app-shell">
+      <div class="surface">
+        <p id="sessionStatus" role="status">Verificando sua sessão…</p>
+        <div id="sessionError" class="feedback error" role="alert" tabindex="-1" hidden></div>
+        <noscript><p class="feedback error">Ative o JavaScript para acessar o sistema.</p></noscript>
+      </div>
+    </div>
+
+    <main id="appShell" class="app-shell" hidden>
+      <div id="appFeedback" class="feedback error" role="alert" tabindex="-1" hidden></div>
+      <nav class="app-tabs" role="tablist" aria-label="Áreas do sistema">
+        <button id="tab-new" type="button" role="tab" data-tab="new" aria-controls="panel-new" aria-selected="false" tabindex="-1" hidden><span data-icon="plus" aria-hidden="true"></span><span class="tab-label">Nova solicitação</span></button>
+        <button id="tab-requests" type="button" role="tab" data-tab="requests" aria-controls="panel-requests" aria-selected="false" tabindex="-1"><span data-icon="clipboard" aria-hidden="true"></span><span class="tab-label">Minhas solicitações</span></button>
+        <button id="tab-users" type="button" role="tab" data-tab="users" aria-controls="panel-users" aria-selected="false" tabindex="-1" hidden><span data-icon="users" aria-hidden="true"></span><span class="tab-label">Usuários</span></button>
+        <button id="tab-dashboard" type="button" role="tab" data-tab="dashboard" aria-controls="panel-dashboard" aria-selected="false" tabindex="-1" hidden><span data-icon="chart" aria-hidden="true"></span><span class="tab-label">Dashboard</span></button>
+        <span class="nav-caption"><span data-icon="route" aria-hidden="true"></span>Logística em movimento</span>
+      </nav>
+
+      <section id="panel-new" class="app-panel" role="tabpanel" aria-labelledby="tab-new" tabindex="0" hidden>
+        <div class="page-heading"><span class="heading-icon" data-icon="ambulance" aria-hidden="true"></span><div class="heading-copy"><span class="view-kicker">APOIO À OPERAÇÃO</span><h2>Nova solicitação</h2><p>Informe os dados da operação para análise do perfil MASTER. Todos os campos são obrigatórios.</p></div></div>
+        <div id="requestFeedback" class="feedback" role="status" tabindex="-1" hidden></div>
+        <form id="requestForm" class="surface" method="post">
+          <fieldset id="requestFields" disabled>
+            <legend class="section-heading"><span class="section-number" aria-hidden="true">01</span>Dados da solicitação</legend>
+            <div class="form-grid">
+              <div class="form-field"><label for="requestName">Nome do solicitante</label><input id="requestName" name="name" type="text" autocomplete="name" maxlength="120" required /></div>
+              <div class="form-field">
+                <label for="requestEmail">E-mail da conta</label>
+                <input id="requestEmail" name="email" type="email" autocomplete="email" maxlength="254" readonly required aria-describedby="emailHint" />
+                <small id="emailHint">Vinculado ao seu acesso individual.</small>
+              </div>
+              <fieldset class="form-field field-span-2 choice-panel"><legend><span data-icon="building" aria-hidden="true"></span>SVC</legend><p id="svcsHint" class="field-hint">Selecione uma opção.</p><div id="svcsChoices" class="choice-grid" aria-describedby="svcsHint"></div></fieldset>
+              <fieldset class="form-field field-span-2 choice-panel"><legend><span data-icon="truck" aria-hidden="true"></span>Transportadora</legend><p id="carriersHint" class="field-hint" aria-live="polite">Selecione um SVC para ver as transportadoras disponíveis.</p><div id="carriersChoices" class="choice-grid" aria-describedby="carriersHint" hidden></div></fieldset>
+              <fieldset class="form-field field-span-2 choice-panel"><legend><span data-icon="pin" aria-hidden="true"></span>XPT</legend><p id="xptsHint" class="field-hint" aria-live="polite">Selecione um SVC para ver os XPTs disponíveis.</p><div id="xptsChoices" class="choice-grid" aria-describedby="xptsHint" hidden></div></fieldset>
+              <div class="form-field"><label for="routeId"><span data-icon="route" aria-hidden="true"></span>ID da rota</label><input id="routeId" name="routeId" type="text" maxlength="80" required /></div>
+              <div class="form-field"><label for="loadedModal"><span data-icon="truck" aria-hidden="true"></span>Modal carregado</label><input id="loadedModal" name="loadedModal" type="text" maxlength="80" required /></div>
+              <div class="form-field"><label for="packageCount"><span data-icon="package" aria-hidden="true"></span>Quantidade de pacotes</label><input id="packageCount" name="packageCount" type="number" min="1" max="1000000" step="1" inputmode="numeric" required /></div>
+              <div class="form-field"><label for="stopCount"><span data-icon="pin" aria-hidden="true"></span>Quantidade de paradas</label><input id="stopCount" name="stopCount" type="number" min="1" max="1000000" step="1" inputmode="numeric" required /></div>
+              <div class="form-field field-span-2"><label for="ambulanceModal"><span data-icon="ambulance" aria-hidden="true"></span>Modal para ambulância</label><input id="ambulanceModal" name="ambulanceModal" type="text" maxlength="80" required /></div>
+              <fieldset class="form-field field-span-2"><legend>Motivo da solicitação</legend><p id="reasonsHint" class="field-hint">Selecione uma opção.</p><div id="reasonsChoices" class="choice-grid" aria-describedby="reasonsHint"></div></fieldset>
+            </div>
+            <div class="form-actions"><span class="form-action-note"><span data-icon="shield" aria-hidden="true"></span>Envio para análise do Master</span><button id="requestSubmit" type="submit" class="btn btn-primary"><span data-icon="arrow-right" aria-hidden="true"></span><span class="button-label">Enviar solicitação</span></button></div>
+          </fieldset>
+        </form>
+        <div class="toolbar"><p id="optionsStatus" role="status">Carregando opções do formulário…</p><button id="retryOptions" type="button" class="btn btn-secondary" hidden>Tentar carregar opções</button></div>
+      </section>
+
+      <section id="panel-requests" class="app-panel" role="tabpanel" aria-labelledby="tab-requests" tabindex="0" hidden>
+        <div class="page-heading"><span class="heading-icon" data-icon="clipboard" aria-hidden="true"></span><div class="heading-copy"><span class="view-kicker">ACOMPANHAMENTO DA OPERAÇÃO</span><h2 id="requestsHeading">Minhas solicitações</h2><p id="requestsDescription">Acompanhe o histórico e as decisões das suas solicitações.</p></div></div>
+        <div class="metric-grid" aria-label="Contagem de solicitações">
+          <div class="metric-card metric-total"><span class="metric-symbol" data-icon="clipboard" aria-hidden="true"></span><div><span>Total de solicitações</span><strong id="countAll">0</strong></div></div>
+          <div class="metric-card metric-pending"><span class="metric-symbol" data-icon="clock" aria-hidden="true"></span><div><span>Pendentes</span><strong id="countPending">0</strong></div></div>
+          <div class="metric-card metric-approved"><span class="metric-symbol" data-icon="check" aria-hidden="true"></span><div><span>Aprovadas</span><strong id="countApproved">0</strong></div></div>
+          <div class="metric-card metric-rejected"><span class="metric-symbol" data-icon="x" aria-hidden="true"></span><div><span>Reprovadas</span><strong id="countRejected">0</strong></div></div>
+        </div>
+        <div class="surface toolbar">
+          <div class="form-field"><label for="statusFilter">Status</label><select id="statusFilter"><option value="all">Todos os status</option><option value="pendente">Pendente</option><option value="aprovada">Aprovada</option><option value="reprovada">Reprovada</option></select></div>
+          <div class="form-field toolbar-search"><label for="requestSearch">Buscar solicitação</label><div class="search-control"><span data-icon="search" aria-hidden="true"></span><input id="requestSearch" type="search" placeholder="Protocolo, rota, nome, e-mail ou transportadora" /></div></div>
+          <button id="refreshRequests" type="button" class="btn btn-secondary"><span data-icon="refresh" aria-hidden="true"></span><span class="button-label">Atualizar</span></button>
+        </div>
+        <div id="requestsFeedback" class="feedback" role="status" tabindex="-1" hidden></div>
+        <p id="requestsStatus" role="status">Carregando solicitações…</p>
+        <div id="requestList" class="request-list" aria-label="Lista de solicitações"></div>
+      </section>
+
+      <section id="panel-users" class="app-panel" role="tabpanel" aria-labelledby="tab-users" tabindex="0" hidden>
+        <div class="page-heading"><span class="heading-icon" data-icon="users" aria-hidden="true"></span><div class="heading-copy"><span class="view-kicker">GESTÃO DE ACESSOS</span><h2>Usuários</h2><p>Cadastre os acessos individuais e consulte os perfis autorizados.</p></div></div>
+        <div id="usersFeedback" class="feedback" role="status" tabindex="-1" hidden></div>
+        <form id="userForm" class="surface" method="post">
+          <h3 class="section-heading"><span class="section-symbol" data-icon="shield" aria-hidden="true"></span>Cadastrar acesso</h3>
+          <div class="form-grid">
+            <div class="form-field"><label for="newUserName">Nome</label><input id="newUserName" name="name" type="text" autocomplete="off" maxlength="120" required /></div>
+            <div class="form-field"><label for="newUserEmail">E-mail</label><input id="newUserEmail" name="email" type="email" autocomplete="off" maxlength="254" autocapitalize="none" spellcheck="false" required /></div>
+            <div class="form-field"><label for="newUserPassword">Senha</label><input id="newUserPassword" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="1024" required aria-describedby="passwordHint" /><small id="passwordHint">Mínimo de 8 caracteres.</small></div>
+            <div class="form-field"><label for="newUserRole">Perfil</label><select id="newUserRole" name="role" required><option value="mlp">MLP — solicitações</option><option value="master">MASTER — aprovação e acessos</option></select></div>
+          </div>
+          <div class="form-actions"><button id="userSubmit" type="submit" class="btn btn-primary"><span data-icon="plus" aria-hidden="true"></span><span class="button-label">Cadastrar usuário</span></button></div>
+        </form>
+        <section class="surface" aria-labelledby="usersTableHeading">
+          <div class="toolbar"><h3 id="usersTableHeading" class="section-heading"><span class="section-symbol" data-icon="users" aria-hidden="true"></span>Acessos cadastrados</h3><button id="refreshUsers" type="button" class="btn btn-secondary"><span data-icon="refresh" aria-hidden="true"></span><span class="button-label">Atualizar</span></button></div>
+          <p id="usersStatus" role="status">Carregando usuários…</p>
+          <div id="usersTableWrap" class="data-table-wrap" hidden>
+            <table class="data-table"><thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Perfil</th><th scope="col">Cadastro</th><th scope="col">Ações</th></tr></thead><tbody id="usersTableBody"></tbody></table>
+          </div>
+        </section>
+      </section>
+      <section id="panel-dashboard" class="app-panel" role="tabpanel" aria-labelledby="tab-dashboard" tabindex="0" hidden>
+        <div id="dashboardRoot"></div>
+      </section>
+    </main>
+
+    <dialog id="deleteUserDialog" class="user-delete-dialog" aria-labelledby="deleteUserTitle" aria-describedby="deleteUserExplanation">
+      <form id="deleteUserForm" class="dialog-body" method="post">
+        <h2 id="deleteUserTitle" class="dialog-title">Excluir usuário</h2>
+        <p>Confirme a exclusão do acesso de <strong id="deleteUserName"></strong>.</p>
+        <p id="deleteUserEmail"></p>
+        <p id="deleteUserExplanation">O acesso será encerrado. As solicitações e decisões registradas serão mantidas.</p>
+        <div id="deleteUserFeedback" class="feedback error" role="alert" tabindex="-1" hidden></div>
+        <div class="dialog-actions">
+          <button id="cancelDeleteUser" type="button" class="btn btn-secondary" autofocus>Cancelar</button>
+          <button id="confirmDeleteUser" type="submit" class="btn btn-danger">Excluir usuário</button>
+        </div>
+      </form>
+    </dialog>
+
+    <footer class="site-footer">Desenvolvido por <strong>Islan Cristian</strong> · OPS III · Contato: <a href="mailto:islan.isalbuquerque@mercadolivre.com">islan.isalbuquerque@mercadolivre.com</a></footer>
+  </body>
+</html>

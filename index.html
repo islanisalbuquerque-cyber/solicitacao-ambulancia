@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content="Tela de acesso ao sistema de Solicitação de Ambulância." />
+    <title>Solicitação de Ambulância — Login</title>
+    <link rel="icon" href="src/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="src/style.css" />
+    <script src="src/login.js" defer></script>
+  </head>
+  <body class="login-page">
+    <header class="login-header">
+      <div class="login-header-inner">
+        <div class="login-brand">
+          <img src="src/assets/mercadolivre-logo.webp" alt="Mercado Livre" width="116" height="52" />
+          <div class="login-header-label"><span>GESTÃO OPERACIONAL</span><strong>Solicitação de Ambulância</strong></div>
+        </div>
+        <div class="login-header-access">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3" /><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" /></svg>
+          <span>Acesso restrito</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="login-shell">
+      <section class="login-intro" aria-label="Sobre o sistema">
+        <p class="login-eyebrow"><span aria-hidden="true"></span>APOIO À OPERAÇÃO</p>
+        <p class="login-headline">O apoio certo para<br />a sua <span>operação.</span></p>
+        <p class="login-description">Solicite apoio para as rotas e acompanhe cada etapa, do envio à decisão. Tudo em um só lugar.</p>
+
+        <svg class="login-illustration" viewBox="0 0 600 350" width="600" height="350" fill="none" aria-hidden="true" focusable="false">
+          <circle cx="300" cy="174" r="143" fill="#e9ebf7" />
+          <circle cx="433" cy="94" r="27" fill="#fff1a8" />
+          <circle cx="136" cy="208" r="12" fill="#dceaff" />
+          <path d="M100 283H524" stroke="#d6d9e8" stroke-width="2" stroke-linecap="round" />
+          <path d="M98 182c-45-76 65-126 124-111 71 18 104-27 162-20 63 7 126 52 105 115" stroke="#b5bce2" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 8" />
+          <rect x="128" y="87" width="101" height="121" rx="14" fill="white" stroke="#2d3277" stroke-width="2" />
+          <rect x="150" y="77" width="57" height="21" rx="7" fill="#2d3277" />
+          <path d="m145 120 4 4 7-8m-11 31 4 4 7-8m-11 31 4 4 7-8" stroke="#3483fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M167 120h43m-43 27h43m-43 27h30" stroke="#d6daee" stroke-width="5" stroke-linecap="round" />
+          <path d="M211 160a13 13 0 0 1 13-13h139v108H211V160Z" fill="white" stroke="#2d3277" stroke-width="2.5" />
+          <path d="M363 174h42l36 42v39h-78v-81Z" fill="#ffe600" stroke="#2d3277" stroke-width="2.5" stroke-linejoin="round" />
+          <path d="M377 184h23l22 28h-45v-28Z" fill="#eaf1ff" stroke="#2d3277" stroke-width="2" stroke-linejoin="round" />
+          <path d="M212 230h151M367 230h16" stroke="#2d3277" stroke-width="2" stroke-linecap="round" />
+          <rect x="219" y="247" width="225" height="10" rx="4" fill="#2d3277" />
+          <rect x="429" y="225" width="12" height="8" rx="2" fill="white" />
+          <circle cx="251" cy="258" r="23" fill="#2d3277" /><circle cx="251" cy="258" r="10" fill="#e9ebf7" />
+          <circle cx="402" cy="258" r="23" fill="#2d3277" /><circle cx="402" cy="258" r="10" fill="#e9ebf7" />
+          <rect x="268" y="177" width="60" height="38" rx="9" fill="#fff7bd" />
+          <path d="m280 196 10 9 23-20" stroke="#2d3277" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="m456 241 27-14 29 14-28 15-28-15Z" fill="#ffe600" stroke="#2d3277" stroke-width="2" stroke-linejoin="round" />
+          <path d="M456 241v29l28 15 28-15v-29m-28 15v29m-15-51 29 15" stroke="#2d3277" stroke-width="2" stroke-linejoin="round" />
+          <path d="m474 244 12 6" stroke="#2d3277" stroke-width="4" stroke-linecap="round" />
+          <circle cx="163" cy="206" r="14" fill="#ecc4a8" /><path d="M149 204c-3-21 26-25 28-5l-17-3-5 9-6-1Z" fill="#2d3277" />
+          <path d="m151 222-12 32 23 10 18-12-5-30h-24Z" fill="#ffe600" stroke="#2d3277" stroke-width="2" stroke-linejoin="round" />
+          <path d="m153 254-4 28m21-28 9 28m-30 0h-11m41 0h10" stroke="#2d3277" stroke-width="7" stroke-linecap="round" />
+          <path d="m173 226 16 13 17-9m-59-3-14 15 10 10" stroke="#ecc4a8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M153 224v20m14-20v20" stroke="white" stroke-width="4" />
+          <path d="M466 99c0-22 34-22 34 0 0 11-17 28-17 28s-17-17-17-28Z" fill="#3483fa" stroke="#2d3277" stroke-width="2" /><circle cx="483" cy="98" r="5" fill="white" />
+          <path d="m270 63 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" fill="#ffe600" />
+          <circle cx="533" cy="183" r="4" fill="#b8bfe4" /><circle cx="89" cy="238" r="4" fill="#ffe600" />
+        </svg>
+
+        <ul class="login-benefits">
+          <li><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3" /><path d="M9 4V2h6v2M9 10h6m-6 4h6m-6 4h3" /></svg>Solicitações centralizadas</li>
+          <li><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11a9 9 0 1 1 2.5 7M3 5v6h6m3-4v5l3 2" /></svg>Histórico de decisões</li>
+        </ul>
+      </section>
+
+      <section class="card login-card" aria-labelledby="loginTitle">
+        <div class="login-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v2" /><circle cx="12" cy="6" r="4" /></svg></div>
+        <p class="login-card-eyebrow">BEM-VINDO(A)</p>
+        <h1 id="loginTitle">Solicitação de Ambulância</h1>
+        <p class="login-card-description">Entre com seu acesso individual.</p>
+
+        <form id="loginForm" method="post">
+          <div class="field">
+            <label for="email">E-mail</label>
+            <div class="input-shell">
+              <svg class="field-icon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="m4 7 8 6 8-6" /></svg>
+              <input type="email" id="email" required autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="Digite seu e-mail" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="password">Senha</label>
+            <div class="input-shell password-field">
+              <svg class="field-icon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3" /><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" /></svg>
+              <input type="password" id="password" required autocomplete="current-password" placeholder="Digite sua senha" />
+              <button class="password-toggle" type="button" id="togglePassword" aria-label="Mostrar senha" aria-pressed="false" aria-controls="password" title="Mostrar ou ocultar senha">
+                <svg class="eye-icon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /><path class="eye-slash" d="m3 3 18 18" /></svg>
+              </button>
+            </div>
+          </div>
+          <div id="loginError" class="login-error" role="alert" tabindex="-1" hidden></div>
+          <button id="submitButton" type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+
+        <div class="login-access-note">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" /><path d="m8.5 12 2.5 2.5 4.5-5" /></svg>
+          <p class="login-hint">Acesso liberado pelo administrador. Fale com o admin se não tiver uma conta.</p>
+        </div>
+        <noscript><p class="login-error">Ative o JavaScript para entrar no aplicativo.</p></noscript>
+      </section>
+    </main>
+
+    <footer class="site-footer">Desenvolvido por <strong>Islan Cristian</strong> · OPS III · Contato: <a href="mailto:islan.isalbuquerque@mercadolivre.com">islan.isalbuquerque@mercadolivre.com</a></footer>
+  </body>
+</html>

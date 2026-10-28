@@ -1,0 +1,15 @@
+data/
+node_modules/
+*.log
+.env
+.env.*
+!.env.example
+private/
+build/
+*.apk
+*.p12
+*.jks
+*.keystore
+*.dpapi
+*bootstrap*.json
+*master-privado*.json
